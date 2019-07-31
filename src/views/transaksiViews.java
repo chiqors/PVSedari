@@ -227,6 +227,26 @@ public class transaksiViews extends javax.swing.JInternalFrame {
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
+        Database db = new Database();
+        transaksiTableModel tabeltransaksi = new transaksiTableModel();
+        tabeltransaksi.setData(db.tampil_semua_transaksi());
+        try {
+            int baris = tblTransaksi.getSelectedRow();
+            String id = (String)tabeltransaksi.getValueAt(baris, 0);
+            
+            Object[] pilihan = {"Ya","Tidak"};
+            int jawaban = JOptionPane.showOptionDialog(null," Anda Yakin, Ingin Menghapus"
+                    + " Data Transaksi Dengan ID "+id+" ? ","Peringatan",JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE,null,pilihan,pilihan[0]);
+            if(jawaban == 0){
+                db.hapusTransaksi(id);
+                tampilData();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih Data Yang Ingin Dihapus!");
+            System.out.println("Error : "+e.getMessage());
+        }
+        tampilData();
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void tblTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTransaksiMouseClicked
