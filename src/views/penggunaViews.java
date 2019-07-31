@@ -286,10 +286,10 @@ public class penggunaViews extends javax.swing.JInternalFrame {
         keyword = JOptionPane.showInputDialog(null,"Masukan nama pengguna yang dicari : ",
                 "Filter/Pencarian",JOptionPane.QUESTION_MESSAGE);
         if(keyword!=null){
-             Database db = new Database();
-        penggunaTableModel tabelpengguna = new penggunaTableModel();
-        tabelpengguna.setData(db.filter_pengguna(keyword));
-        tblPengguna.setModel(tabelpengguna);
+            Database db = new Database();
+            penggunaTableModel tabelpengguna = new penggunaTableModel();
+            tabelpengguna.setData(db.filter_pengguna(keyword));
+            tblPengguna.setModel(tabelpengguna);
         }
     }//GEN-LAST:event_btnCariActionPerformed
 

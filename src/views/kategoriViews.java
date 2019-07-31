@@ -5,6 +5,11 @@
  */
 package views;
 
+import database.Database;
+import database.kategori;
+import database.kategoriTableModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author bandi
@@ -16,8 +21,26 @@ public class kategoriViews extends javax.swing.JInternalFrame {
      */
     public kategoriViews() {
         initComponents();
+        tampilData();
     }
 
+    public void tampilData(){
+        Database db = new Database();
+        kategoriTableModel tabelkategori = new kategoriTableModel();
+        tabelkategori.setData(db.tampil_semua_kategori());
+        tblKategori.setModel(tabelkategori);
+        txtId.setText("");
+        txtKategori.setText("");
+    }
+
+    public void refreshdata(){
+        Database db = new Database();
+        kategoriTableModel tabelkategori = new kategoriTableModel();
+        tabelkategori.setData(db.tampil_semua_kategori());
+        tabelkategori.fireTableDataChanged();
+        tblKategori.changeSelection(0, 0, false, false);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,15 +52,17 @@ public class kategoriViews extends javax.swing.JInternalFrame {
 
         jTextField4 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        txtNama = new javax.swing.JTextField();
+        txtKategori = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPengguna = new javax.swing.JTable();
+        tblKategori = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         btnTambah = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
+        btnCari = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
         jTextField4.setText("jTextField4");
 
@@ -45,30 +70,61 @@ public class kategoriViews extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Data Kategori Menu");
 
-        txtNama.setText("jTextField1");
-
         jLabel4.setText("ID");
 
         txtId.setEditable(false);
-        txtId.setText("0");
 
-        tblPengguna.setModel(new javax.swing.table.DefaultTableModel(
+        tblKategori.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null}
             },
             new String [] {
-                "ID", "Nama Kategori Menu"
+                "ID", "Kategori"
             }
         ));
-        jScrollPane1.setViewportView(tblPengguna);
+        tblKategori.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblKategoriMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblKategori);
 
-        jLabel8.setText("Nama");
+        jLabel8.setText("Kategori");
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         btnUbah.setText("Ubah");
+        btnUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUbahActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,21 +133,26 @@ public class kategoriViews extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(jLabel4))
                         .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtKategori, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+                            .addComponent(txtId)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnTambah)
                         .addGap(18, 18, 18)
                         .addComponent(btnUbah)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHapus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnHapus))
+                        .addComponent(btnCari)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRefresh)
+                        .addGap(2, 2, 2))
                     .addComponent(jLabel1))
                 .addContainerGap())
         );
@@ -106,13 +167,15 @@ public class kategoriViews extends javax.swing.JInternalFrame {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
                     .addComponent(btnUbah)
-                    .addComponent(btnHapus))
+                    .addComponent(btnHapus)
+                    .addComponent(btnCari)
+                    .addComponent(btnRefresh))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -121,9 +184,88 @@ public class kategoriViews extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        db.tambah_kategori(new kategori(txtId.getText(), txtKategori.getText()));
+        tampilData();
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        kategoriTableModel tabelkategori = new kategoriTableModel();
+        tabelkategori.setData(db.tampil_semua_kategori());
+        
+        db.updateKategori(new kategori(txtId.getText(), txtKategori.getText()));
+        tampilData();
+    }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        kategoriTableModel tabelkategori = new kategoriTableModel();
+        tabelkategori.setData(db.tampil_semua_kategori());
+        try {
+            int baris = tblKategori.getSelectedRow();
+            String id = (String)tabelkategori.getValueAt(baris, 0);
+            
+            Object[] pilihan = {"Ya","Tidak"};
+            int jawaban = JOptionPane.showOptionDialog(null," Anda Yakin, Ingin Menghapus"
+                    + " Data Kategori Dengan ID "+id+" ? ","Peringatan",JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE,null,pilihan,pilihan[0]);
+            if(jawaban == 0){
+                db.hapusKategori(id);
+                tampilData();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih Data Yang Ingin Dihapus!");
+            System.out.println("Error : "+e.getMessage());
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void tblKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKategoriMouseClicked
+        // TODO add your handling code here:
+        Database db = new Database();
+        kategoriTableModel tabelkategori = new kategoriTableModel();
+        tabelkategori.setData(db.tampil_semua_kategori());
+        
+        int baris = tblKategori.getSelectedRow();
+        String id = (String)tblKategori.getValueAt(baris, 0);
+        String kategori = (String)tblKategori.getValueAt(baris, 1);
+        kategori k = db.pilih_kategori(id);
+        
+        if(k!=null){
+            txtId.setText(id);
+            txtKategori.setText(kategori);
+        } else {
+            JOptionPane.showMessageDialog(null, "Kategori menu dengan ID "+id+" Tidak Ditemukan!");
+        }
+    }//GEN-LAST:event_tblKategoriMouseClicked
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        String keyword;
+        keyword = JOptionPane.showInputDialog(null,"Masukan nama kategori yang dicari : ",
+                "Filter/Pencarian",JOptionPane.QUESTION_MESSAGE);
+        if(keyword!=null){
+             Database db = new Database();
+            kategoriTableModel tabelkategori = new kategoriTableModel();
+            tabelkategori.setData(db.filter_kategori(keyword));
+            tblKategori.setModel(tabelkategori);
+        }
+    }//GEN-LAST:event_btnCariActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnUbah;
     private javax.swing.JLabel jLabel1;
@@ -131,8 +273,8 @@ public class kategoriViews extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTable tblPengguna;
+    private javax.swing.JTable tblKategori;
     private javax.swing.JTextField txtId;
-    private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtKategori;
     // End of variables declaration//GEN-END:variables
 }

@@ -20,6 +20,191 @@ public class Database {
     public final String user = "root";
     public final String pass = "";
 
+    /*
+    --------------------------------------------------------
+    DATA KATEGORI MAKANAN
+    --------------------------------------------------------
+    */
+    
+    //tampilkan semua data
+
+    public ArrayList<kategori> tampil_semua_kategori() {
+        ArrayList<kategori> list = new ArrayList<kategori>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM kategori";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new kategori(rs.getString("id"), 
+                        rs.getString("kategori")));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+
+    //tambah data
+    public void tambah_kategori(kategori k) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "INSERT INTO kategori VALUES (NULL,'" +k.getKategori()+ "')";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public void hapusKategori(String id) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "DELETE FROM kategori WHERE id='" + id + "'";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+                try {
+                    konek.close();
+                } catch (Exception b) {
+
+                }
+            }
+        }
+    }
+
+    public void updateKategori(kategori k) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "UPDATE kategori SET kategori = '" + k.getKategori()+ "' "
+                    + "WHERE id = '" + k.getId()+ "'";
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public kategori pilih_kategori(String id) {
+        kategori k = null;
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "SELECT * FROM kategori WHERE id = '" + id + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                k = new kategori(rs.getString("id"), rs.getString("kategori"));
+
+            } else {
+                k = null;
+            }
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return k;
+    }
+    
+    public ArrayList<kategori> filter_kategori(String keyword) {
+        ArrayList<kategori> list = new ArrayList<kategori>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM kategori where kategori like '%"+keyword+"%'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new kategori(rs.getString("id"), 
+                        rs.getString("kategori")));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+    
+    /*
+    --------------------------------------------------------
+    DATA PENGGUNA
+    --------------------------------------------------------
+    */
+    
     //tampilkan semua data
 
     public ArrayList<pengguna> tampil_semua_pengguna() {
