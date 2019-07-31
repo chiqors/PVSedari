@@ -6,10 +6,17 @@
 package views;
 
 import database.Database;
+import database.transaksi;
 import database.transaksiTableModel;
 import frames.mainFrame;
+import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+import main.sessionAlur;
+import main.sessionPengguna;
+import main.sessionTransaksi;
 
 
 /**
@@ -17,17 +24,23 @@ import javax.swing.JOptionPane;
  * @author bandi
  */
 public class transaksiViews extends javax.swing.JInternalFrame {
+    
+    private static transaksiViews myInstance;
 
+    public static transaksiViews getInstance() {
+        if (myInstance == null) {
+            myInstance = new transaksiViews();
+        }
+        return myInstance;
+    }
+    
     /**
      * Creates new form penggunaViews
      */
-    detail_transaksiViews detail_transaksi = new detail_transaksiViews();
        
     public transaksiViews() {
         initComponents();
         tampilData();
-        //JDesktopPane mainframe_desktop = this.getDesktopPane();
-        //mainframe_desktop.add(detail_transaksi);
     }
 
     public void tampilData(){
@@ -63,6 +76,8 @@ public class transaksiViews extends javax.swing.JInternalFrame {
         btnTampilkan = new javax.swing.JButton();
         btnCari = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        lblId_selected = new javax.swing.JLabel();
 
         jTextField4.setText("jTextField4");
 
@@ -120,6 +135,10 @@ public class transaksiViews extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel2.setText("ID Transaksi Selected:");
+
+        lblId_selected.setText("-");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,7 +158,12 @@ public class transaksiViews extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCari))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblId_selected, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -148,7 +172,11 @@ public class transaksiViews extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(lblId_selected))
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
                     .addComponent(btnHapus)
@@ -156,7 +184,7 @@ public class transaksiViews extends javax.swing.JInternalFrame {
                     .addComponent(btnCari)
                     .addComponent(btnRefresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -165,12 +193,36 @@ public class transaksiViews extends javax.swing.JInternalFrame {
 
     private void btnTampilkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTampilkanActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        detail_transaksi.setVisible(true);
+        String id_totransaksi = lblId_selected.getText();
+        sessionTransaksi.setTampil_id_transaksi(id_totransaksi);
+        detail_transaksiViews detailtransaksi = detail_transaksiViews.getInstance();
+        detailtransaksi.pack();
+        if (detailtransaksi.isVisible()) {
+        } else {
+            getDesktopPane().add(detailtransaksi);
+            detailtransaksi.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_btnTampilkanActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
+        Database db = new Database();
+        String alur_id_transaksi = db.tambah_alur_persiapan_transaksi();
+        sessionAlur.setAlur_id_transaksi(alur_id_transaksi);
+        tambahAlurDetailTransaksiViews tambahalurdetailtransaksi = tambahAlurDetailTransaksiViews.getInstance();
+        tambahalurdetailtransaksi.pack();
+        if (tambahalurdetailtransaksi.isVisible()) {
+        } else {
+            getDesktopPane().add(tambahalurdetailtransaksi);
+            tambahalurdetailtransaksi.setVisible(true);
+            this.dispose();
+        }
+        /*try {
+            tambahalurdetailtransaksi.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(mainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
@@ -179,7 +231,24 @@ public class transaksiViews extends javax.swing.JInternalFrame {
 
     private void tblTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTransaksiMouseClicked
         // TODO add your handling code here:
+        Database db = new Database();
+        transaksiTableModel tabeltransaksi = new transaksiTableModel();
+        tabeltransaksi.setData(db.tampil_semua_transaksi());
         
+        int baris = tblTransaksi.getSelectedRow();
+        String id = (String)tblTransaksi.getValueAt(baris, 0);
+        String tanggal = (String)tblTransaksi.getValueAt(baris, 1);
+        int total_harga = (int)tblTransaksi.getValueAt(baris, 2);
+        int bayar = (int)tblTransaksi.getValueAt(baris, 3);
+        int kembalian = (int)tblTransaksi.getValueAt(baris, 4);
+        String kasir = (String)tblTransaksi.getValueAt(baris, 5);
+        transaksi t = db.pilih_transaksi(id);
+        
+        if(t!=null){
+            lblId_selected.setText(id);
+        } else {
+            JOptionPane.showMessageDialog(null, "ID Transaksi dengan ID "+id+" tidak ditemukan!");
+        }
     }//GEN-LAST:event_tblTransaksiMouseClicked
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
@@ -208,8 +277,10 @@ public class transaksiViews extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnTampilkan;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel lblId_selected;
     private javax.swing.JTable tblTransaksi;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,17 +5,37 @@
  */
 package views;
 
+import database.Database;
+import database.transaksiTableModel;
+import database.transaksi;
+import javax.swing.JOptionPane;
+import main.sessionAlur;
+import main.sessionPengguna;
+
 /**
  *
  * @author bandi
  */
 public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
 
+    private static tambahAlurTransaksiViews myInstance;
+
+    public static tambahAlurTransaksiViews getInstance() {
+        if (myInstance == null) {
+            myInstance = new tambahAlurTransaksiViews();
+        }
+        return myInstance;
+    }
+    
     /**
      * Creates new form penggunaViews
      */
     public tambahAlurTransaksiViews() {
         initComponents();
+        txtId.setText(sessionAlur.getAlur_id_transaksi());
+        txtTanggal.setText(sessionAlur.getAlur_transaksi_tanggal());
+        txtTotal_harga.setText(String.valueOf(sessionAlur.getAlur_total_harga_menu()));
+        txtKasir.setText(sessionPengguna.getS_nip());
     }
 
     /**
@@ -29,10 +49,8 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
 
         jTextField4 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        txtSub_total = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
         btnTambah = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -54,16 +72,17 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Data Detail Transaksi >");
 
-        txtSub_total.setEditable(false);
-
         jLabel4.setText("ID");
 
         txtId.setEditable(false);
         txtId.setText("0");
 
-        jLabel8.setText("Sub Total");
-
         btnTambah.setText("Tambah & Selesai");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Tanggal");
 
@@ -75,6 +94,11 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
         jLabel5.setText("Bayar");
 
         txtBayar.setText("0");
+        txtBayar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBayarFocusLost(evt);
+            }
+        });
 
         txtTanggal.setEditable(false);
         txtTanggal.setText("0");
@@ -91,6 +115,8 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
         txtKembalian.setText("0");
 
         jLabel11.setText("Kasir");
+
+        txtKasir.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -121,7 +147,6 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel8)
                                             .addComponent(jLabel3)
                                             .addComponent(jLabel5)
                                             .addComponent(jLabel10)
@@ -133,7 +158,6 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
                                     .addComponent(txtTotal_harga)
                                     .addComponent(txtBayar)
                                     .addComponent(txtKembalian)
-                                    .addComponent(txtSub_total, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(38, 38, 38))))
         );
@@ -157,10 +181,6 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
                     .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSub_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtTotal_harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13)
@@ -177,11 +197,46 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
                     .addComponent(txtKasir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTambah)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtBayarFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBayarFocusLost
+        // TODO add your handling code here:
+        int bayar = Integer.parseInt(txtBayar.getText());
+        int total_harga = Integer.parseInt(txtTotal_harga.getText());
+        int kembalian = bayar - total_harga;
+        if (kembalian < 0) {
+            JOptionPane.showMessageDialog(null, "Pembayaran anda tidak valid! Ulangi");
+        } else {
+            txtKembalian.setText(String.valueOf(kembalian));
+        }
+    }//GEN-LAST:event_txtBayarFocusLost
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        
+        db.final_update_alur_transaksi(new transaksi(
+                txtId.getText(),
+                txtTanggal.getText(),
+                Integer.parseInt(txtTotal_harga.getText()),
+                Integer.parseInt(txtBayar.getText()),
+                Integer.parseInt(txtKembalian.getText()),
+                txtKasir.getText()
+        ));
+        JOptionPane.showMessageDialog(null, "Alur Transaksi berhasil dicapai! Anda dikembalikan ke data transaksi");
+        transaksiViews transaksi = transaksiViews.getInstance();
+        transaksi.pack();
+        if (transaksi.isVisible()) {
+        } else {
+            getDesktopPane().add(transaksi);
+            transaksi.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnTambahActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -195,14 +250,12 @@ public class tambahAlurTransaksiViews extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField txtBayar;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtKasir;
     private javax.swing.JTextField txtKembalian;
-    private javax.swing.JTextField txtSub_total;
     private javax.swing.JTextField txtTanggal;
     private javax.swing.JTextField txtTotal_harga;
     // End of variables declaration//GEN-END:variables

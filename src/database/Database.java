@@ -7,9 +7,12 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import main.sessionAlur;
+import main.sessionPengguna;
 /**
  *
  * @author bandi
@@ -19,7 +22,104 @@ public class Database {
     public final String url = "jdbc:mysql://localhost/pvsedari";
     public final String user = "root";
     public final String pass = "";
+    
+    java.util.Date dt = new java.util.Date();
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /*
+    --------------------------------------------------------
+    DATA TAMBAH ALUR TRANSAKSI
+    --------------------------------------------------------
+    */
+    
+    public String tambah_alur_persiapan_transaksi() {
+        Connection konek = null;
+        PreparedStatement stmt = null;
+        String kasir = sessionPengguna.getS_nip();
+        String id_transaksi = "";
+        String currentTime = sdf.format(dt);
+        sessionAlur.setAlur_transaksi_tanggal(currentTime);
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            String sql = "INSERT INTO transaksi VALUES (NULL,'"+currentTime+"',NULL,NULL,NULL,'"+kasir+"')";
+            stmt = konek.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.executeUpdate();
+            
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.next();
+            id_transaksi = rs.getString(1);
+            rs.close();
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return id_transaksi;
+    }
+    
+    public void tambah_alur_detail_transaksi(detail_transaksi dt) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "INSERT INTO detail_transaksi VALUES (NULL,'" 
+                    +dt.getId_transaksi()+ "','"+dt.getId_menu()+"'"
+                    + ","+dt.getJumlah_beli()+","+dt.getTotal_harga()+")";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+    
+    public void final_update_alur_transaksi(transaksi t) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "UPDATE transaksi SET tanggal = "
+                    + "'"+t.getTanggal()+"',"
+                    + "total_harga = '"+t.getTotal_harga()+"',"
+                    + "bayar = "+t.getBayar()+","
+                    + "kembalian = "+t.getBayar()+","
+                    + "kasir = "+t.getKasir()+" "
+                    + "WHERE id = '" + t.getId()+ "'";
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+    
     /*
     --------------------------------------------------------
     DATA DETAIL TRANSAKSI
@@ -182,7 +282,7 @@ public class Database {
         return dt;
     }
     
-    public ArrayList<detail_transaksi> filter_detail_transaksi(String keyword) {
+    public ArrayList<detail_transaksi> filter_detail_transaksi(String keyword, String id) {
         ArrayList<detail_transaksi> list = new ArrayList<detail_transaksi>();
         Connection konek = null;
         Statement stmt = null;
@@ -191,7 +291,7 @@ public class Database {
             konek = DriverManager.getConnection(url, user, pass);
             stmt = konek.createStatement();
             String sql;
-            sql = "SELECT * FROM detail_transaksi where id_menu like '%"+keyword+"%'";
+            sql = "SELECT * FROM detail_transaksi where id_menu like '%"+keyword+"%' AND id_transaksi = '"+id+"' ";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 list.add(new detail_transaksi(

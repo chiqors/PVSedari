@@ -9,6 +9,7 @@ import database.Database;
 import database.detail_transaksi;
 import database.detail_transaksiTableModel;
 import javax.swing.JOptionPane;
+import main.sessionTransaksi;
 
 /**
  *
@@ -16,18 +17,29 @@ import javax.swing.JOptionPane;
  */
 public class detail_transaksiViews extends javax.swing.JInternalFrame {
 
+    private static detail_transaksiViews myInstance;
+
+    public static detail_transaksiViews getInstance() {
+        if (myInstance == null) {
+            myInstance = new detail_transaksiViews();
+        }
+        return myInstance;
+    }
+    
+    public String id_detail_transaksi;
     /**
      * Creates new form penggunaViews
      */
     public detail_transaksiViews() {
         initComponents();
+        id_detail_transaksi = sessionTransaksi.getTampil_id_transaksi();
         tampilData();
     }
     
     public void tampilData(){
         Database db = new Database();
         detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
-        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi("1"));
+        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi(id_detail_transaksi));
         tblDetail_transaksi.setModel(tabeldetailtransaksi);
         txtId.setText("");
         txtId_transaksi.setText("");
@@ -39,7 +51,7 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
     public void refreshdata(){
         Database db = new Database();
         detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
-        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi("1"));
+        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi(id_detail_transaksi));
         tabeldetailtransaksi.fireTableDataChanged();
         tblDetail_transaksi.changeSelection(0, 0, false, false);
     }
@@ -70,6 +82,7 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         btnCari = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
+        btnKeluar = new javax.swing.JButton();
 
         jTextField4.setText("jTextField4");
 
@@ -132,6 +145,13 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
             }
         });
 
+        btnKeluar.setText("Keluar");
+        btnKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKeluarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,25 +159,27 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1)
+                        .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5))
-                                .addGap(39, 39, 39)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtId_transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txt_Id_menu, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtJumlah_Beli, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtTotal_harga, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnKeluar))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel8)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel5))
+                            .addGap(39, 39, 39)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtId_transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txt_Id_menu, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtJumlah_Beli, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTotal_harga, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(0, 0, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnTambah)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -169,8 +191,10 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnKeluar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -221,7 +245,7 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         if(keyword!=null){
              Database db = new Database();
             detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
-            tabeldetailtransaksi.setData(db.filter_detail_transaksi(keyword));
+            tabeldetailtransaksi.setData(db.filter_detail_transaksi(keyword,id_detail_transaksi));
             tblDetail_transaksi.setModel(tabeldetailtransaksi);
         }
     }//GEN-LAST:event_btnCariActionPerformed
@@ -230,7 +254,7 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         Database db = new Database();
         detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
-        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi("1"));
+        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi(id_detail_transaksi));
         
         int baris = tblDetail_transaksi.getSelectedRow();
         String id = (String)tblDetail_transaksi.getValueAt(baris, 0);
@@ -251,9 +275,15 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tblDetail_transaksiMouseClicked
 
+    private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnKeluarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTambah;
     private javax.swing.JLabel jLabel1;
