@@ -5,6 +5,11 @@
  */
 package views;
 
+import database.Database;
+import database.pengguna;
+import database.penggunaTableModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author bandi
@@ -16,6 +21,26 @@ public class penggunaViews extends javax.swing.JInternalFrame {
      */
     public penggunaViews() {
         initComponents();
+        tampilData();
+    }
+    
+    public void tampilData(){
+        Database db = new Database();
+        penggunaTableModel tabelpengguna = new penggunaTableModel();
+        tabelpengguna.setData(db.tampil_semua_pengguna());
+        tblPengguna.setModel(tabelpengguna);
+        txtNIP.setText("");
+        txtNama.setText("");
+        txtUsername.setText("");
+        txtPassword.setText("");
+    }
+
+    public void refreshdata(){
+        Database db = new Database();
+        penggunaTableModel tabelpengguna = new penggunaTableModel();
+        tabelpengguna.setData(db.tampil_semua_pengguna());
+        tabelpengguna.fireTableDataChanged();
+        tblPengguna.changeSelection(0, 0, false, false);
     }
 
     /**
@@ -42,6 +67,8 @@ public class penggunaViews extends javax.swing.JInternalFrame {
         btnTambah = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        btnCari = new javax.swing.JButton();
 
         jTextField4.setText("jTextField4");
 
@@ -49,15 +76,15 @@ public class penggunaViews extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Data Pengguna");
 
-        txtNama.setText("jTextField1");
-
         jLabel3.setText("Username");
 
-        txtUsername.setText("jTextField2");
+        txtUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsernameActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("NIP");
-
-        txtNIP.setText("jTextField3");
 
         tblPengguna.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -67,6 +94,11 @@ public class penggunaViews extends javax.swing.JInternalFrame {
                 "NIP", "Nama", "Username"
             }
         ));
+        tblPengguna.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPenggunaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPengguna);
 
         jdfas.setText("Password");
@@ -74,10 +106,39 @@ public class penggunaViews extends javax.swing.JInternalFrame {
         jLabel8.setText("Nama");
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         btnUbah.setText("Ubah");
+        btnUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUbahActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,6 +152,17 @@ public class penggunaViews extends javax.swing.JInternalFrame {
                         .addGap(0, 14, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(btnTambah)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnUbah)
+                                .addGap(14, 14, 14)
+                                .addComponent(btnHapus)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCari)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRefresh))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,13 +175,6 @@ public class penggunaViews extends javax.swing.JInternalFrame {
                                     .addComponent(txtNama)
                                     .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
                                     .addComponent(txtNIP, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(btnTambah)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUbah)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnHapus))
                             .addComponent(jLabel1))
                         .addContainerGap())))
         );
@@ -138,17 +203,105 @@ public class penggunaViews extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
                     .addComponent(btnUbah)
-                    .addComponent(btnHapus))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                    .addComponent(btnHapus)
+                    .addComponent(btnRefresh)
+                    .addComponent(btnCari))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        db.tambah_pengguna(new pengguna(txtNIP.getText(), txtNama.getText(), txtUsername.getText(),
+                txtPassword.getText()));
+        tampilData();
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        penggunaTableModel tabelpengguna = new penggunaTableModel();
+        tabelpengguna.setData(db.tampil_semua_pengguna());
+        
+        db.updatePengguna(new pengguna(txtNIP.getText(), txtNama.getText(), txtUsername.getText(), txtPassword.getText()));
+        tampilData();
+    }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void tblPenggunaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPenggunaMouseClicked
+        // TODO add your handling code here:
+        Database db = new Database();
+        penggunaTableModel tabelpengguna = new penggunaTableModel();
+        tabelpengguna.setData(db.tampil_semua_pengguna());
+        
+        int baris = tblPengguna.getSelectedRow();
+        String nip = (String)tabelpengguna.getValueAt(baris, 0);
+        String nama = (String)tabelpengguna.getValueAt(baris, 1);
+        String username = (String)tabelpengguna.getValueAt(baris, 2);
+        pengguna p = db.pilih_pengguna(nip);
+        
+        if(p!=null){
+            txtNIP.setText(nip);
+            txtNama.setText(nama);
+            txtUsername.setText(username);
+        } else {
+            JOptionPane.showMessageDialog(null, "Pengguna dengan NIP "+nip+" Tidak Ditemukan!");
+        }
+    }//GEN-LAST:event_tblPenggunaMouseClicked
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        penggunaTableModel tabelpengguna = new penggunaTableModel();
+          tabelpengguna.setData(db.tampil_semua_pengguna());
+        try {
+            int baris = tblPengguna.getSelectedRow();
+            String nip = (String)tabelpengguna.getValueAt(baris, 0);
+            
+            Object[] pilihan = {"Ya","Tidak"};
+            int jawaban = JOptionPane.showOptionDialog(null," Anda Yakin, Ingin Menghapus"
+                    + " Data Pengguna Dengan NIP "+nip+" ? ","Peringatan",JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE,null,pilihan,pilihan[0]);
+            if(jawaban == 0){
+                db.hapusPengguna(nip);
+                tampilData();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih Data Yang Ingin Dihapus!");
+            System.out.println("Error : "+e.getMessage());
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        String keyword;
+        keyword = JOptionPane.showInputDialog(null,"Masukan nama pengguna yang dicari : ",
+                "Filter/Pencarian",JOptionPane.QUESTION_MESSAGE);
+        if(keyword!=null){
+             Database db = new Database();
+        penggunaTableModel tabelpengguna = new penggunaTableModel();
+        tabelpengguna.setData(db.filter_pengguna(keyword));
+        tblPengguna.setModel(tabelpengguna);
+        }
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsernameActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnUbah;
     private javax.swing.JLabel jLabel1;
@@ -164,4 +317,5 @@ public class penggunaViews extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
+
 }
