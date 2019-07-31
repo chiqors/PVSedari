@@ -5,8 +5,11 @@
  */
 package views;
 
+import database.Database;
+import database.transaksiTableModel;
 import frames.mainFrame;
 import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -22,10 +25,26 @@ public class transaksiViews extends javax.swing.JInternalFrame {
        
     public transaksiViews() {
         initComponents();
+        tampilData();
         //JDesktopPane mainframe_desktop = this.getDesktopPane();
         //mainframe_desktop.add(detail_transaksi);
     }
 
+    public void tampilData(){
+        Database db = new Database();
+        transaksiTableModel tabeltransaksi = new transaksiTableModel();
+        tabeltransaksi.setData(db.tampil_semua_transaksi());
+        tblTransaksi.setModel(tabeltransaksi);
+    }
+
+    public void refreshdata(){
+        Database db = new Database();
+        transaksiTableModel tabeltransaksi = new transaksiTableModel();
+        tabeltransaksi.setData(db.tampil_semua_transaksi());
+        tabeltransaksi.fireTableDataChanged();
+        tblTransaksi.changeSelection(0, 0, false, false);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,10 +57,12 @@ public class transaksiViews extends javax.swing.JInternalFrame {
         jTextField4 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPengguna = new javax.swing.JTable();
+        tblTransaksi = new javax.swing.JTable();
         btnTambah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnTampilkan = new javax.swing.JButton();
+        btnCari = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
         jTextField4.setText("jTextField4");
 
@@ -49,24 +70,53 @@ public class transaksiViews extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Data Transaksi");
 
-        tblPengguna.setModel(new javax.swing.table.DefaultTableModel(
+        tblTransaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Tanggal", "Sub Total", "Total Harga", "Bayar", "Kembalian", "Kasir"
+                "ID", "Tanggal", "Total Harga", "Bayar", "Kembalian", "Kasir"
             }
         ));
-        jScrollPane1.setViewportView(tblPengguna);
+        tblTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTransaksiMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblTransaksi);
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         btnTampilkan.setText("Tampilkan");
         btnTampilkan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTampilkanActionPerformed(evt);
+            }
+        });
+
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
             }
         });
 
@@ -82,8 +132,12 @@ public class transaksiViews extends javax.swing.JInternalFrame {
                         .addComponent(btnTambah)
                         .addGap(18, 18, 18)
                         .addComponent(btnTampilkan)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHapus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnHapus))
+                        .addComponent(btnRefresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCari))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -98,9 +152,11 @@ public class transaksiViews extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
                     .addComponent(btnHapus)
-                    .addComponent(btnTampilkan))
+                    .addComponent(btnTampilkan)
+                    .addComponent(btnCari)
+                    .addComponent(btnRefresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -113,14 +169,47 @@ public class transaksiViews extends javax.swing.JInternalFrame {
         detail_transaksi.setVisible(true);
     }//GEN-LAST:event_btnTampilkanActionPerformed
 
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void tblTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTransaksiMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tblTransaksiMouseClicked
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        String keyword;
+        keyword = JOptionPane.showInputDialog(null,"Masukan tanggal transaksi yang dicari : ",
+                "Filter/Pencarian",JOptionPane.QUESTION_MESSAGE);
+        if(keyword!=null){
+            Database db = new Database();
+            transaksiTableModel tabeltransaksi = new transaksiTableModel();
+            tabeltransaksi.setData(db.filter_transaksi(keyword));
+            tblTransaksi.setModel(tabeltransaksi);
+        }
+    }//GEN-LAST:event_btnCariActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnTampilkan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTable tblPengguna;
+    private javax.swing.JTable tblTransaksi;
     // End of variables declaration//GEN-END:variables
 }

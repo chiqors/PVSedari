@@ -37,8 +37,12 @@
                       <Component id="btnTambah" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnTampilkan" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnHapus" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnRefresh" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="btnCari" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -59,9 +63,11 @@
                   <Component id="btnTambah" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnHapus" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnTampilkan" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCari" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRefresh" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="307" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="311" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -80,13 +86,12 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="tblPengguna">
+        <Component class="javax.swing.JTable" name="tblTransaksi">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="7" rowCount="1">
+              <Table columnCount="6" rowCount="1">
                 <Column editable="true" title="ID" type="java.lang.Object"/>
                 <Column editable="true" title="Tanggal" type="java.lang.Object"/>
-                <Column editable="true" title="Sub Total" type="java.lang.Object"/>
                 <Column editable="true" title="Total Harga" type="java.lang.Object"/>
                 <Column editable="true" title="Bayar" type="java.lang.Object"/>
                 <Column editable="true" title="Kembalian" type="java.lang.Object"/>
@@ -94,6 +99,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblTransaksiMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -101,11 +109,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Tambah"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTambahActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnHapus">
       <Properties>
         <Property name="text" type="java.lang.String" value="Hapus"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHapusActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnTampilkan">
       <Properties>
@@ -113,6 +127,22 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTampilkanActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnCari">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cari"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCariActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRefresh">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Refresh"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
