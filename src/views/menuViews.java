@@ -5,6 +5,11 @@
  */
 package views;
 
+import database.Database;
+import database.menu;
+import database.menuTableModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author bandi
@@ -16,8 +21,29 @@ public class menuViews extends javax.swing.JInternalFrame {
      */
     public menuViews() {
         initComponents();
+        tampilData();
     }
 
+    public void tampilData(){
+        Database db = new Database();
+        menuTableModel tabelmenu = new menuTableModel();
+        tabelmenu.setData(db.tampil_semua_menu());
+        tblMenu.setModel(tabelmenu);
+        txtId.setText("");
+        txtId_kategori.setText("");
+        txtNama_menu.setText("");
+        txtHarga.setText("");
+        txtStok.setText("");
+    }
+
+    public void refreshdata(){
+        Database db = new Database();
+        menuTableModel tabelmenu = new menuTableModel();
+        tabelmenu.setData(db.tampil_semua_menu());
+        tabelmenu.fireTableDataChanged();
+        tblMenu.changeSelection(0, 0, false, false);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,7 +59,7 @@ public class menuViews extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPengguna = new javax.swing.JTable();
+        tblMenu = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         btnTambah = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
@@ -44,6 +70,8 @@ public class menuViews extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         txtStok = new javax.swing.JTextField();
         txtId_kategori = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
         jTextField4.setText("jTextField4");
 
@@ -51,42 +79,68 @@ public class menuViews extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Data Menu");
 
-        txtNama_menu.setText("jTextField1");
-
         jLabel4.setText("ID");
 
         txtId.setEditable(false);
         txtId.setText("0");
 
-        tblPengguna.setModel(new javax.swing.table.DefaultTableModel(
+        tblMenu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID", "ID Jenis Menu", "Nama Menu", "Harga", "Stok"
+                "ID", "ID Kategori", "Nama Menu", "Harga", "Stok"
             }
         ));
-        jScrollPane1.setViewportView(tblPengguna);
+        tblMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMenuMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblMenu);
 
         jLabel8.setText("Nama Menu");
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         btnUbah.setText("Ubah");
+        btnUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUbahActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Kategori Menu");
+        jLabel2.setText("ID Kategori");
 
         jLabel3.setText("Harga");
 
-        txtHarga.setText("jTextField1");
-
         jLabel5.setText("Stok");
 
-        txtStok.setText("jTextField2");
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
 
-        txtId_kategori.setText("jTextField1");
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,25 +148,22 @@ public class menuViews extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNama_menu, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
-                            .addComponent(txtHarga)
-                            .addComponent(txtStok)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTambah)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnUbah)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnHapus))
-                    .addComponent(jLabel1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNama_menu)
+                                    .addComponent(txtHarga)
+                                    .addComponent(txtStok, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE))))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -120,13 +171,26 @@ public class menuViews extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(68, 68, 68)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtId_kategori, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(58, 58, 58))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+                            .addComponent(txtId_kategori))
+                        .addGap(10, 10, 10))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(btnTambah)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnUbah)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnHapus)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRefresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCari)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -158,18 +222,117 @@ public class menuViews extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
                     .addComponent(btnUbah)
-                    .addComponent(btnHapus))
+                    .addComponent(btnHapus)
+                    .addComponent(btnCari)
+                    .addComponent(btnRefresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        db.tambah_menu(new menu(
+                txtId.getText(),
+                txtId_kategori.getText(),
+                txtNama_menu.getText(),
+                Integer.parseInt(txtHarga.getText()),
+                Integer.parseInt(txtStok.getText())
+        ));
+        tampilData();
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        menuTableModel tabelmenu = new menuTableModel();
+        tabelmenu.setData(db.tampil_semua_menu());
+        
+        db.updateMenu(new menu(
+                txtId.getText(),
+                txtId_kategori.getText(),
+                txtNama_menu.getText(),
+                Integer.parseInt(txtHarga.getText()),
+                Integer.parseInt(txtStok.getText())
+        ));
+        tampilData();
+    }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        menuTableModel tabelmenu = new menuTableModel();
+        tabelmenu.setData(db.tampil_semua_menu());
+        try {
+            int baris = tblMenu.getSelectedRow();
+            String id = (String)tabelmenu.getValueAt(baris, 0);
+            
+            Object[] pilihan = {"Ya","Tidak"};
+            int jawaban = JOptionPane.showOptionDialog(null," Anda Yakin, Ingin Menghapus"
+                    + " Data Menu Dengan ID "+id+" ? ","Peringatan",JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE,null,pilihan,pilihan[0]);
+            if(jawaban == 0){
+                db.hapusMenu(id);
+                tampilData();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih Data Yang Ingin Dihapus!");
+            System.out.println("Error : "+e.getMessage());
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        String keyword;
+        keyword = JOptionPane.showInputDialog(null,"Masukan nama kategori yang dicari : ",
+                "Filter/Pencarian",JOptionPane.QUESTION_MESSAGE);
+        if(keyword!=null){
+             Database db = new Database();
+            menuTableModel tabelmenu = new menuTableModel();
+            tabelmenu.setData(db.filter_menu(keyword));
+            tblMenu.setModel(tabelmenu);
+        }
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void tblMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMenuMouseClicked
+        // TODO add your handling code here:
+        Database db = new Database();
+        menuTableModel tabelmenu = new menuTableModel();
+        tabelmenu.setData(db.tampil_semua_menu());
+        
+        int baris = tblMenu.getSelectedRow();
+        String id = (String)tblMenu.getValueAt(baris, 0);
+        String id_kategori = (String)tblMenu.getValueAt(baris, 1);
+        String nama_menu = (String)tblMenu.getValueAt(baris, 2);
+        int harga = (int)tblMenu.getValueAt(baris, 3);
+        int stok = (int)tblMenu.getValueAt(baris, 4);
+        menu m = db.pilih_menu(id);
+        
+        if(m!=null){
+            txtId.setText(id);
+            txtId_kategori.setText(id_kategori);
+            txtNama_menu.setText(nama_menu);
+            txtHarga.setText(String.valueOf(harga));
+            txtStok.setText(String.valueOf(stok));
+        } else {
+            JOptionPane.showMessageDialog(null, "Menu dengan ID "+id+" tidak ditemukan!");
+        }
+    }//GEN-LAST:event_tblMenuMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnUbah;
     private javax.swing.JLabel jLabel1;
@@ -180,7 +343,7 @@ public class menuViews extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTable tblPengguna;
+    private javax.swing.JTable tblMenu;
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtId_kategori;

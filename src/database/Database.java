@@ -22,7 +22,208 @@ public class Database {
 
     /*
     --------------------------------------------------------
-    DATA KATEGORI MAKANAN
+    DATA MENU
+    --------------------------------------------------------
+    */
+    
+    //tampilkan semua data
+
+    public ArrayList<menu> tampil_semua_menu() {
+        ArrayList<menu> list = new ArrayList<menu>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM menu";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new menu(
+                        rs.getString("id"), 
+                        rs.getString("id_kategori"),
+                        rs.getString("nama_menu"),
+                        Integer.parseInt(rs.getString("harga")),
+                        Integer.parseInt(rs.getString("stok"))
+                ));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+
+    //tambah data
+    public void tambah_menu(menu m) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "INSERT INTO menu VALUES (NULL,'" 
+                    +m.getId_kategori()+ "','"+m.getNama_menu()+"'"
+                    + ","+m.getHarga()+","+m.getStok()+")";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public void hapusMenu(String id) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "DELETE FROM menu WHERE id='" + id + "'";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+                try {
+                    konek.close();
+                } catch (Exception b) {
+
+                }
+            }
+        }
+    }
+
+    public void updateMenu(menu m) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "UPDATE menu SET id_kategori = "
+                    + "'"+m.getId_kategori()+"',"
+                    + "nama_menu = '"+m.getNama_menu()+"',"
+                    + "harga = "+m.getHarga()+","
+                    + "stok = "+m.getStok()+" "
+                    + "WHERE id = '" + m.getId()+ "'";
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public menu pilih_menu(String id) {
+        menu m = null;
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "SELECT * FROM menu WHERE id = '" + id + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                m = new menu(
+                    rs.getString("id"), 
+                    rs.getString("id_kategori"),
+                    rs.getString("nama_menu"),
+                    Integer.parseInt(rs.getString("harga")),
+                    Integer.parseInt(rs.getString("stok"))
+                );
+
+            } else {
+                m = null;
+            }
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return m;
+    }
+    
+    public ArrayList<menu> filter_menu(String keyword) {
+        ArrayList<menu> list = new ArrayList<menu>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM menu where nama_menu like '%"+keyword+"%'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new menu(
+                        rs.getString("id"), 
+                        rs.getString("id_kategori"),
+                        rs.getString("nama_menu"),
+                        Integer.parseInt(rs.getString("harga")),
+                        Integer.parseInt(rs.getString("stok"))
+                ));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+    
+    /*
+    --------------------------------------------------------
+    DATA KATEGORI MENU
     --------------------------------------------------------
     */
     
