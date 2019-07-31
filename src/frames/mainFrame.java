@@ -7,6 +7,7 @@ package frames;
 
 import javax.swing.JDesktopPane;
 import main.desktopPaneBG;
+import main.sessionPengguna;
 import views.detail_transaksiViews;
 import views.homeViews;
 import views.kategoriViews;
@@ -25,6 +26,10 @@ public class mainFrame extends javax.swing.JFrame {
     /**
      * Creates new form mainFrame
      */
+    
+    // Session
+    String username = sessionPengguna.getS_username();
+    
     homeViews home = new homeViews();
     menuViews menu = new menuViews();
     transaksiViews transaksi = new transaksiViews();
@@ -33,6 +38,7 @@ public class mainFrame extends javax.swing.JFrame {
     
     public mainFrame() {
         initComponents();
+        lblSessionUsername.setText(username);
         
         desktopPane.add(home);
         desktopPane.add(menu);
@@ -114,7 +120,7 @@ public class mainFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Selamat Datang");
+        jLabel1.setText("Selamat Datang,");
 
         lblSessionUsername.setText("-");
 
@@ -145,16 +151,16 @@ public class mainFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblSessionUsername))
+                        .addComponent(lblSessionUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblSessionUsername, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lblSessionUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)

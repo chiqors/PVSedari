@@ -965,4 +965,46 @@ public class Database {
         }
         return list;
     }
+    
+    /*
+    --------------------------------------------------------
+    DATA LOGIN
+    --------------------------------------------------------
+    */
+    
+    public pengguna login(String username, String password) {
+        pengguna p = null;
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "SELECT * FROM pengguna WHERE username = '" + username + "' AND password = MD5('" + password + "')";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                p = new pengguna(
+                        rs.getString("nip"),
+                        rs.getString("nama"),
+                        rs.getString("username"),
+                        rs.getString("password")
+                );
+            } else {
+                p = null;
+            }
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return p;
+    }
 }

@@ -5,11 +5,18 @@
  */
 package frames;
 
+import database.Database;
+import database.pengguna;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import main.sessionPengguna;
+
 /**
  *
  * @author bandi
  */
 public class authFrame extends javax.swing.JFrame {
+    private Connection dbConnection;
 
     /**
      * Creates new form loginFrame
@@ -32,11 +39,11 @@ public class authFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        txtPassword = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         btnMasuk = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,10 +60,6 @@ public class authFrame extends javax.swing.JFrame {
         txtUsername.setBackground(new java.awt.Color(46, 125, 50));
         txtUsername.setForeground(new java.awt.Color(255, 255, 255));
         txtUsername.setBorder(null);
-
-        txtPassword.setBackground(new java.awt.Color(46, 125, 50));
-        txtPassword.setForeground(new java.awt.Color(255, 255, 255));
-        txtPassword.setBorder(null);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -90,25 +93,35 @@ public class authFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txtPassword.setBackground(new java.awt.Color(46, 125, 50));
+        txtPassword.setForeground(new java.awt.Color(255, 255, 255));
+        txtPassword.setBorder(null);
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtUsername)
-                    .addComponent(jLabel2)
-                    .addComponent(jSeparator1)
-                    .addComponent(txtPassword)
-                    .addComponent(jLabel3)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                    .addComponent(btnMasuk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(174, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(162, 162, 162))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtUsername)
+                            .addComponent(jLabel2)
+                            .addComponent(jSeparator1)
+                            .addComponent(jLabel3)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                            .addComponent(btnMasuk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtPassword)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(164, 164, 164)
+                        .addComponent(jLabel1)))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,13 +136,13 @@ public class authFrame extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -148,10 +161,45 @@ public class authFrame extends javax.swing.JFrame {
 
     private void btnMasukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMasukMouseClicked
         // TODO add your handling code here:
-        mainFrame main = new mainFrame();
-        main.setVisible(true);
-        this.setVisible(false);
+        Database db = new Database();
+        String username = txtUsername.getText();
+        String password = txtPassword.getText();
+        
+        pengguna p = db.login(username,password);
+        // Jika akun valid
+        if(p!=null){
+            sessionPengguna.setS_nip(p.getNip());
+            sessionPengguna.setS_nama(p.getNama());
+            sessionPengguna.setS_username(p.getUsername());
+            JOptionPane.showMessageDialog(null, "Login Berhasil!");
+            new mainFrame().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Akun anda tidak valid! Silahkan ketik kembali dengan benar");
+            txtPassword.setText("");
+        }
     }//GEN-LAST:event_btnMasukMouseClicked
+
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+        // TODO add your handling code here:
+        Database db = new Database();
+        String username = txtUsername.getText();
+        String password = txtPassword.getText();
+        
+        pengguna p = db.login(username,password);
+        // Jika akun valid
+        if(p!=null){
+            sessionPengguna.setS_nip(p.getNip());
+            sessionPengguna.setS_nama(p.getNama());
+            sessionPengguna.setS_username(p.getUsername());
+            JOptionPane.showMessageDialog(null, "Login Berhasil!");
+            new mainFrame().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Akun anda tidak valid! Silahkan ketik kembali dengan benar");
+            txtPassword.setText("");
+        }
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,7 +246,7 @@ public class authFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }
