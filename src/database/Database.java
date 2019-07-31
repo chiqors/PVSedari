@@ -22,6 +22,206 @@ public class Database {
 
     /*
     --------------------------------------------------------
+    DATA DETAIL TRANSAKSI
+    --------------------------------------------------------
+    */
+    
+    //tampilkan semua data
+
+    public ArrayList<detail_transaksi> tampil_semua_detail_transaksi(String id) {
+        ArrayList<detail_transaksi> list = new ArrayList<detail_transaksi>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM detail_transaksi WHERE id_transaksi = "+id+"";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new detail_transaksi(
+                        rs.getString("id"), 
+                        rs.getString("id_transaksi"),
+                        rs.getString("id_menu"),
+                        Integer.parseInt(rs.getString("jumlah_beli")),
+                        Integer.parseInt(rs.getString("total_harga"))
+                ));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+
+    //tambah data
+    public void tambah_detail_transaksi(detail_transaksi dt) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "INSERT INTO detail_transaksi VALUES (NULL,'" 
+                    +dt.getId_transaksi()+ "','"+dt.getId_menu()+"'"
+                    + ","+dt.getJumlah_beli()+","+dt.getTotal_harga()+")";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public void hapusDetail_transaksi(String id) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "DELETE FROM detail_transaksi WHERE id='" + id + "'";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+                try {
+                    konek.close();
+                } catch (Exception b) {
+
+                }
+            }
+        }
+    }
+
+    public void updateDetail_transaksi(detail_transaksi dt) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "UPDATE detail_transaksi SET id_transaksi = "
+                    + "'"+dt.getId_transaksi()+"',"
+                    + "id_menu = '"+dt.getId_menu()+"',"
+                    + "jumlah_beli = "+dt.getJumlah_beli()+","
+                    + "total_harga = "+dt.getTotal_harga()+" "
+                    + "WHERE id = '" + dt.getId()+ "'";
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public detail_transaksi pilih_detail_transaksi(String id) {
+        detail_transaksi dt = null;
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "SELECT * FROM detail_transaksi WHERE id = '" + id + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                dt = new detail_transaksi(
+                    rs.getString("id"), 
+                    rs.getString("id_transaksi"),
+                    rs.getString("id_menu"),
+                    Integer.parseInt(rs.getString("jumlah_beli")),
+                    Integer.parseInt(rs.getString("total_harga"))
+                );
+            } else {
+                dt = null;
+            }
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return dt;
+    }
+    
+    public ArrayList<detail_transaksi> filter_detail_transaksi(String keyword) {
+        ArrayList<detail_transaksi> list = new ArrayList<detail_transaksi>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM detail_transaksi where id_menu like '%"+keyword+"%'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new detail_transaksi(
+                        rs.getString("id"), 
+                        rs.getString("id_transaksi"),
+                        rs.getString("id_menu"),
+                        Integer.parseInt(rs.getString("jumlah_beli")),
+                        Integer.parseInt(rs.getString("total_harga"))
+                ));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+    
+    /*
+    --------------------------------------------------------
     DATA TRANSAKSI
     --------------------------------------------------------
     */

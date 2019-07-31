@@ -5,6 +5,11 @@
  */
 package views;
 
+import database.Database;
+import database.detail_transaksi;
+import database.detail_transaksiTableModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author bandi
@@ -16,6 +21,27 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
      */
     public detail_transaksiViews() {
         initComponents();
+        tampilData();
+    }
+    
+    public void tampilData(){
+        Database db = new Database();
+        detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
+        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi("1"));
+        tblDetail_transaksi.setModel(tabeldetailtransaksi);
+        txtId.setText("");
+        txtId_transaksi.setText("");
+        txt_Id_menu.setText("");
+        txtJumlah_Beli.setText("");
+        txtTotal_harga.setText("");
+    }
+
+    public void refreshdata(){
+        Database db = new Database();
+        detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
+        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi("1"));
+        tabeldetailtransaksi.fireTableDataChanged();
+        tblDetail_transaksi.changeSelection(0, 0, false, false);
     }
 
     /**
@@ -33,7 +59,7 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPengguna = new javax.swing.JTable();
+        tblDetail_transaksi = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         btnTambah = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -42,6 +68,8 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         txtJumlah_Beli = new javax.swing.JTextField();
         txtTotal_harga = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        btnCari = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
         jTextField4.setText("jTextField4");
 
@@ -57,7 +85,7 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         txtId.setEditable(false);
         txtId.setText("0");
 
-        tblPengguna.setModel(new javax.swing.table.DefaultTableModel(
+        tblDetail_transaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null}
             },
@@ -65,53 +93,78 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
                 "ID", "ID Transaksi", "ID Menu", "Jumlah Beli", "Total Harga"
             }
         ));
-        jScrollPane1.setViewportView(tblPengguna);
+        tblDetail_transaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDetail_transaksiMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblDetail_transaksi);
 
         jLabel8.setText("ID Transaksi");
 
         btnTambah.setText("Tambah");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("ID Menu");
 
-        txt_Id_menu.setText("jTextField1");
-
         jLabel3.setText("Jumlah Beli");
-
-        txtJumlah_Beli.setText("jTextField2");
 
         txtTotal_harga.setEditable(false);
         txtTotal_harga.setText("0");
 
         jLabel5.setText("Total Harga");
 
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
-                        .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtId_transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_Id_menu, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtJumlah_Beli, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTotal_harga, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnTambah)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5))
+                                .addGap(39, 39, 39)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtId_transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_Id_menu, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtJumlah_Beli, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTotal_harga, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnTambah)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRefresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCari)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,7 +192,10 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
                     .addComponent(txtTotal_harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTambah)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTambah)
+                    .addComponent(btnCari)
+                    .addComponent(btnRefresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -148,8 +204,57 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        tampilData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+        String keyword;
+        keyword = JOptionPane.showInputDialog(null,"Masukan id menu yang dicari : ",
+                "Filter/Pencarian",JOptionPane.QUESTION_MESSAGE);
+        if(keyword!=null){
+             Database db = new Database();
+            detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
+            tabeldetailtransaksi.setData(db.filter_detail_transaksi(keyword));
+            tblDetail_transaksi.setModel(tabeldetailtransaksi);
+        }
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void tblDetail_transaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDetail_transaksiMouseClicked
+        // TODO add your handling code here:
+        Database db = new Database();
+        detail_transaksiTableModel tabeldetailtransaksi = new detail_transaksiTableModel();
+        tabeldetailtransaksi.setData(db.tampil_semua_detail_transaksi("1"));
+        
+        int baris = tblDetail_transaksi.getSelectedRow();
+        String id = (String)tblDetail_transaksi.getValueAt(baris, 0);
+        String id_transaksi = (String)tblDetail_transaksi.getValueAt(baris, 1);
+        String id_menu = (String)tblDetail_transaksi.getValueAt(baris, 2);
+        int jumlah_beli = (int)tblDetail_transaksi.getValueAt(baris, 3);
+        int total_harga = (int)tblDetail_transaksi.getValueAt(baris, 4);
+        detail_transaksi dt = db.pilih_detail_transaksi(id);
+        
+        if(dt!=null){
+            txtId.setText(id);
+            txtId_transaksi.setText(id_transaksi);
+            txt_Id_menu.setText(id_menu);
+            txtJumlah_Beli.setText(String.valueOf(jumlah_beli));
+            txtTotal_harga.setText(String.valueOf(total_harga));
+        } else {
+            JOptionPane.showMessageDialog(null, "Detail transaksi dengan ID "+id+" tidak ditemukan!");
+        }
+    }//GEN-LAST:event_tblDetail_transaksiMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnTambah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -159,7 +264,7 @@ public class detail_transaksiViews extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTable tblPengguna;
+    private javax.swing.JTable tblDetail_transaksi;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtId_transaksi;
     private javax.swing.JTextField txtJumlah_Beli;
