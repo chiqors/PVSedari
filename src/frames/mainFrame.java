@@ -5,8 +5,16 @@
  */
 package frames;
 
+import javax.swing.JDesktopPane;
 import main.desktopPaneBG;
+import views.detail_transaksiViews;
 import views.homeViews;
+import views.kategoriViews;
+import views.menuViews;
+import views.penggunaViews;
+import views.tambahAlurDetailTransaksiViews;
+import views.tambahAlurTransaksiViews;
+import views.transaksiViews;
 
 /**
  *
@@ -17,12 +25,27 @@ public class mainFrame extends javax.swing.JFrame {
     /**
      * Creates new form mainFrame
      */
+    homeViews home = new homeViews();
+    menuViews menu = new menuViews();
+    transaksiViews transaksi = new transaksiViews();
+    penggunaViews pengguna = new penggunaViews();
+    kategoriViews kategori = new kategoriViews();
+    
     public mainFrame() {
         initComponents();
-        setExtendedState(mainFrame.MAXIMIZED_BOTH);
         
-        homeViews home = new homeViews();
         desktopPane.add(home);
+        desktopPane.add(menu);
+        desktopPane.add(transaksi);
+        desktopPane.add(pengguna);
+        desktopPane.add(kategori);
+        
+        //Hide Visible
+        menu.setVisible(false);
+        transaksi.setVisible(false);
+        pengguna.setVisible(false);
+        kategori.setVisible(false);
+        //Show Visible
         home.setVisible(true);
     }
 
@@ -37,51 +60,178 @@ public class mainFrame extends javax.swing.JFrame {
 
         jMenu1 = new javax.swing.JMenu();
         desktopPane = new javax.swing.JDesktopPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
-        menuItemJenisMenu = new javax.swing.JMenuItem();
-        menuItemMenu = new javax.swing.JMenuItem();
+        btnMenuKategoriMenu = new javax.swing.JButton();
+        btnMenuMenu = new javax.swing.JButton();
+        btnMenuPengguna = new javax.swing.JButton();
+        btnMenuTransaksi = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblSessionUsername = new javax.swing.JLabel();
+        btnHome = new javax.swing.JButton();
+        btnTentang = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        desktopPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
         desktopPane.setLayout(desktopPaneLayout);
         desktopPaneLayout.setHorizontalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 624, Short.MAX_VALUE)
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGap(0, 523, Short.MAX_VALUE)
         );
 
-        jMenu2.setText("Main Menu");
+        btnMenuKategoriMenu.setText("Kategori Menu");
+        btnMenuKategoriMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuKategoriMenuActionPerformed(evt);
+            }
+        });
 
-        menuItemJenisMenu.setText("Jenis Menu");
-        jMenu2.add(menuItemJenisMenu);
+        btnMenuMenu.setText("Menu");
+        btnMenuMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuMenuActionPerformed(evt);
+            }
+        });
 
-        menuItemMenu.setText("Menu");
-        jMenu2.add(menuItemMenu);
+        btnMenuPengguna.setText("Pengguna");
+        btnMenuPengguna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuPenggunaActionPerformed(evt);
+            }
+        });
 
-        jMenuBar1.add(jMenu2);
+        btnMenuTransaksi.setText("Transaksi");
+        btnMenuTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuTransaksiActionPerformed(evt);
+            }
+        });
 
-        setJMenuBar(jMenuBar1);
+        jLabel1.setText("Selamat Datang");
+
+        lblSessionUsername.setText("-");
+
+        btnHome.setText("Home");
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
+
+        btnTentang.setText("Tentang");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMenuKategoriMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMenuMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMenuPengguna, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMenuTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnTentang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblSessionUsername))
+                    .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSessionUsername, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHome)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnMenuKategoriMenu)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnMenuMenu)
+                        .addGap(23, 23, 23)
+                        .addComponent(btnMenuTransaksi)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnMenuPengguna)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTentang))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+        // TODO add your handling code here:
+        //Hide Visible
+        menu.setVisible(false);
+        transaksi.setVisible(false);
+        pengguna.setVisible(false);
+        kategori.setVisible(false);
+        //Show Visible
+        home.setVisible(true);
+    }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void btnMenuKategoriMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuKategoriMenuActionPerformed
+        // TODO add your handling code here:
+        //Hide Visible
+        home.setVisible(false);
+        transaksi.setVisible(false);
+        pengguna.setVisible(false);
+        menu.setVisible(false);
+        //Show Visible
+        kategori.setVisible(true);
+    }//GEN-LAST:event_btnMenuKategoriMenuActionPerformed
+
+    private void btnMenuMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuMenuActionPerformed
+        // TODO add your handling code here:
+        //Hide Visible
+        home.setVisible(false);
+        transaksi.setVisible(false);
+        pengguna.setVisible(false);
+        kategori.setVisible(false);
+        //Show Visible
+        menu.setVisible(true);
+    }//GEN-LAST:event_btnMenuMenuActionPerformed
+
+    private void btnMenuTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuTransaksiActionPerformed
+        // TODO add your handling code here:
+        //Hide Visible
+        menu.setVisible(false);
+        home.setVisible(false);
+        pengguna.setVisible(false);
+        kategori.setVisible(false);
+        //Show Visible
+        transaksi.setVisible(true);
+    }//GEN-LAST:event_btnMenuTransaksiActionPerformed
+
+    private void btnMenuPenggunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPenggunaActionPerformed
+        // TODO add your handling code here:
+        //Hide Visible
+        menu.setVisible(false);
+        transaksi.setVisible(false);
+        home.setVisible(false);
+        kategori.setVisible(false);
+        //Show Visible
+        pengguna.setVisible(true);
+    }//GEN-LAST:event_btnMenuPenggunaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -119,11 +269,23 @@ public class mainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnMenuKategoriMenu;
+    private javax.swing.JButton btnMenuMenu;
+    private javax.swing.JButton btnMenuPengguna;
+    private javax.swing.JButton btnMenuTransaksi;
+    private javax.swing.JButton btnTentang;
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem menuItemJenisMenu;
-    private javax.swing.JMenuItem menuItemMenu;
+    private javax.swing.JLabel lblSessionUsername;
     // End of variables declaration//GEN-END:variables
+
+    public JDesktopPane getDesktopPane() {
+        return desktopPane;
+    }
+
+    public void setDesktopPane(JDesktopPane desktopPane) {
+        this.desktopPane = desktopPane;
+    }
 }
