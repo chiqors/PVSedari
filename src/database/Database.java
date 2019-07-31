@@ -22,6 +22,190 @@ public class Database {
 
     /*
     --------------------------------------------------------
+    DATA TRANSAKSI
+    --------------------------------------------------------
+    */
+    
+    //tampilkan semua data
+
+    public ArrayList<transaksi> tampil_semua_transaksi() {
+        ArrayList<transaksi> list = new ArrayList<transaksi>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM transaksi";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new transaksi(
+                        rs.getString("id"), 
+                        rs.getString("tanggal"),
+                        Integer.parseInt(rs.getString("total_harga")),
+                        Integer.parseInt(rs.getString("bayar")),
+                        Integer.parseInt(rs.getString("kembalian")),
+                        rs.getString("kasir")
+                ));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+
+    //tambah data
+    public void tambah_transaksi(transaksi t) {
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "INSERT INTO transaksi VALUES (NULL,'" 
+                    +t.getTanggal()+ "','"+t.getTotal_harga()+"'"
+                    + ","+t.getBayar()+","+t.getKembalian()+""
+                    + ","+t.getKasir()+")";
+            stmt.executeUpdate(sql);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public void hapusTransaksi(String id) {
+        Connection konek = null;
+        Statement stmt1 = null;
+        Statement stmt2 = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            // QUERY 1
+            stmt1 = konek.createStatement();
+            String sql1 = "DELETE FROM detail_transaksi WHERE id_transaksi='" + id + "'";
+            stmt1.executeUpdate(sql1);
+            // QUERY 2
+            stmt2 = konek.createStatement();
+            String sql2 = "DELETE FROM transaksi WHERE id='" + id + "'";
+            stmt2.executeUpdate(sql2);
+        } catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        } finally {
+            try {
+                stmt1.close();
+                stmt2.close();
+            } catch (Exception e) {
+                try {
+                    konek.close();
+                } catch (Exception b) {
+
+                }
+            }
+        }
+    }
+
+    public transaksi pilih_transaksi(String id) {
+        transaksi t = null;
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql = "SELECT * FROM transaksi WHERE id = '" + id + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                t = new transaksi(
+                    rs.getString("id"), 
+                    rs.getString("tanggal"),
+                    Integer.parseInt(rs.getString("total_harga")),
+                    Integer.parseInt(rs.getString("bayar")),
+                    Integer.parseInt(rs.getString("kembalian")),
+                    rs.getString("kasir")
+                );
+
+            } else {
+                t = null;
+            }
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return t;
+    }
+    
+    public ArrayList<transaksi> filter_transaksi(String keyword) {
+        ArrayList<transaksi> list = new ArrayList<transaksi>();
+        Connection konek = null;
+        Statement stmt = null;
+        try {
+            Class.forName(driver);
+            konek = DriverManager.getConnection(url, user, pass);
+            stmt = konek.createStatement();
+            String sql;
+            sql = "SELECT * FROM transaksi where tanggal like '%"+keyword+"%'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new transaksi(
+                        rs.getString("id"), 
+                        rs.getString("tanggal"),
+                        Integer.parseInt(rs.getString("total_harga")),
+                        Integer.parseInt(rs.getString("bayar")),
+                        Integer.parseInt(rs.getString("kembalian")),
+                        rs.getString("kasir")
+                ));
+            }//endwhile
+            rs.close();
+        }//endtry
+        catch (Exception a) {
+            System.out.println("Error : " + a.getMessage());
+        }//endcatch
+        finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                konek.close();
+            } catch (Exception e) {
+            }
+        }
+        return list;
+    }
+    
+    /*
+    --------------------------------------------------------
     DATA MENU
     --------------------------------------------------------
     */
