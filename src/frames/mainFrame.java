@@ -6,6 +6,7 @@
 package frames;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
 import main.desktopPaneBG;
 import main.sessionPengguna;
 import views.detail_transaksiViews;
@@ -132,6 +133,11 @@ public class mainFrame extends javax.swing.JFrame {
         });
 
         btnTentang.setText("Tentang");
+        btnTentang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTentangActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -239,6 +245,11 @@ public class mainFrame extends javax.swing.JFrame {
         //Show Visible
         pengguna.setVisible(true);
     }//GEN-LAST:event_btnMenuPenggunaActionPerformed
+
+    private void btnTentangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTentangActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(rootPane, "Dibuat oleh: Chiqo, Geo, Yusrizal (IF-2)");
+    }//GEN-LAST:event_btnTentangActionPerformed
 
     /**
      * @param args the command line arguments
